@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { Storage } from "../Storage/Storage";
+import Storage from "../Storage/Storage";
 
 const REACT_APP_API_BASEURL = process.env.REACT_APP_API_BASEURL;
 
@@ -9,19 +9,11 @@ const client = axios.create({
 });
 
 const header = () => {
-  let auth_token = '';
-  if ("auth" in localStorage) {
-    try{
-      auth_token = JSON.parse(localStorage.getItem("auth"))['admin_auth_token'];
-    }catch(err){
-      auth_token = localStorage.getItem("auth")['admin_auth_token'];
-    }
-  }
-
+  let auth_token = Storage.get("token").token;
   let headers = {
     "Content-Type": "application/json",
-    Accept: "application/json",
-    crossDomain: true,
+    // Accept: "application/json",
+    // crossDomain: true,
   };
 
   if (auth_token) {
@@ -103,20 +95,19 @@ client.interceptors.response.use(
   },
   (error) => {
     const { response, config } = error;
-    if (response && config.url === "/admin/count-data") {
-      if (response.data.code === 401) {
-        localStorage.removeItem("auth");
+    if (response && config.url === "/") {
+      if (response.result.statusCode === 401) {
+        Storage.remove("token");
         window.location.href = "/login"
       }
-      return response.data;
+      return response.result;
     } else {
-      if (response && response.data) {
-        return response.data;
+      if (response && response.result) {
+        return response.result;
       } else {
         return false;
       }
     }
-    // return Promise.reject(error);
   }
 );
 export { DataService };

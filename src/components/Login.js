@@ -1,34 +1,24 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import authServices from "../Services/authServices";
+import Storage from "../Storage/Storage";
+import SimpleReactValidator from "simple-react-validator";
 
-  import 'react-toastify/dist/ReactToastify.css';
-   
-toast.configure()
-//import ReactSession from 'react-client-session';
-//ReactSession.setStoreType("localStorage");
+toast.configure();
 
 const Login = () => {
-  // const [email, setEmail] = useState("");
-  // const [pass, setPass] = useState("");
-
   const navigate = useNavigate();
 
-  const initialValues = { email: "", pass: "" };
+  const [, forceUpdate] = useState("");
+  const validator = useRef(
+    new SimpleReactValidator({ autoForceUpdate: { forceUpdate: forceUpdate } })
+  );
+
+  const initialValues = { email: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({email: "", pass: "" });
   const [isSubmit, setIsSubmit] = useState(false);
-  
- // const [validData, setValidData] = useState({validUserName : "" , validPassword : ""})
-  
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  useEffect(() => {
-    console.log(formErrors);
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log(formValues);
-    }
-  }, [formErrors]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,82 +26,59 @@ const Login = () => {
     console.log(formValues);
   };
 
-  const handleValidation = (e) => {
-    const { name, value } = e.target;
-    const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if(name === 'email'){
-      if (!value) {
-        setFormErrors({ ...formErrors, [name]: "email is required" });
-      } else if (!regex.test(value)) {
-        setFormErrors({ ...formErrors, [name]: "This is not a valid format" });
-      }else{
-        setFormErrors({...formErrors, [name]: "" });
-       // setValidData({...validData, "validUserName" : value});
-        setEmail(e.target.value);
-        //this.validUserName = value;
-      }
-    }else if(name === 'pass'){
-      if (!value) {
-        setFormErrors({ ...formErrors, [name]: "password is required" });
-      }else{
-        setFormErrors({...formErrors, [name]: "" });
-       // setValidData({...validData, "validPassword" : value});
-        setPassword(e.target.value);
-      }
-    }
-    console.log(formValues);
-  };
-
-
-
-
-  const validate = (values) => {
-    const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-
-    if (!values.email) {
-      errors.email = "email is required";
-    } else if (!regex.test(values.email)) {
-      errors.email = "This is not a valid email format";
-    }
-
-    if (!values.pass) {
-      errors.pass = "password is required";
-    } else if (values.pass.length < 4) {
-      errors.pass = "Password must be more than 4 characters";
-    } else if (values.pass.length > 10) {
-      errors.pass = "password cannot exceeded more than 20 characters";
-    } 
-
-    return errors;
-  };
-
   const submitHandler = async (event) => {
     event.preventDefault();
-    setFormErrors(validate(formValues));
     setIsSubmit(true);
-    console.log(email);
-    console.log(password);
-    const response = await fetch("http://localhost:4000/api/v1/user/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
-    const responseData = await response.json();
-    if (responseData.success && responseData.statusCode === 200) {
-      toast.success("Login Successfully",{position: toast.POSITION.TOP_CENTER})
-      window.sessionStorage.setItem("token", responseData.result.token);
-      ///ReactSession.set("token", responseData.result.token);
-      window.location.href = '/';
-       // navigate("/");
-    }else{
-      toast.error(responseData.message,{position: toast.POSITION.TOP_CENTER})
+
+    // const response = await fetch("http://localhost:4000/api/v1/user/signin", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     email: email,
+    //     password: password,
+    //   }),
+    // });
+    // const responseData = await response.json();
+    // if (responseData.success && responseData.statusCode === 200) {
+    //   toast.success("Login Successfully",{position: toast.POSITION.TOP_CENTER})
+    //   window.sessionStorage.setItem("token", responseData.result.token);
+    //   ///ReactSession.set("token", responseData.result.token);
+    //   window.location.href = '/';
+    //    // navigate("/");
+    // }else{
+    //   toast.error(responseData.message,{position: toast.POSITION.TOP_CENTER})
+    // }
+
+    const formValid = validator.current.allValid();
+
+    if (formValid) {
+      let postData = {
+        email: formValues.email,
+        password: formValues.password,
+      };
+
+      authServices
+        .loginApi(postData)
+        .then((res) => {
+          if (res.statusCode === 200) {
+            toast.success("Login Successfully", {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            Storage.set("token", JSON.stringify(res.result));
+            window.location.href = "/";
+          } else {
+            toast.error(res.message, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      validator.current.showMessages();
     }
   };
 
@@ -124,7 +91,6 @@ const Login = () => {
         }}
       >
         <header>
-        
           <div className="container">
             <nav className="navbar navbar-expand-lg">
               <div className="container-fluid">
@@ -172,8 +138,7 @@ const Login = () => {
           </div>
         </header>
         <div className="contact">
-          
-<ToastContainer/>
+          <ToastContainer />
           <section>
             <div>
               <div
@@ -202,15 +167,11 @@ const Login = () => {
                         <div className="pt-4 pb-4 pr-3 pl-2">
                           <h3>Login</h3>
 
-                          {Object.keys(formErrors).length === 0 && isSubmit ? (
-                            <div style={{ "text-align": "center" }}>
-                              
-                            </div>
+                          {/* {Object.keys(formErrors).length === 0 && isSubmit ? (
+                            <div style={{ "text-align": "center" }}></div>
                           ) : (
-                            <div style={{ "text-align": "center" }}>
-                              
-                            </div>
-                          )}
+                            <div style={{ "text-align": "center" }}></div>
+                          )} */}
 
                           <form className="user">
                             <div className="form-group">
@@ -228,8 +189,7 @@ const Login = () => {
                                 aria-describedby="emailHelp"
                                 placeholder="Email Address"
                                 value={formValues.email}
-                                onChange={handleChange}
-                                onBlur = {handleValidation}
+                                onChange={(e)=>handleChange(e)}
                               />
                               <i
                                 style={{
@@ -241,12 +201,17 @@ const Login = () => {
                                 }}
                                 className="far fa-envelope common"
                               ></i>
-                              <p style={{ color: "red" }}>{formErrors.email}</p>
+                              {validator.current.message(
+                              "email",
+                              formValues.email,
+                              "required",
+                              { className: "text-danger" }
+                            )}
                             </div>
                             <div className="form-group mt-4 mb-4">
                               <input
                                 type="password"
-                                name="pass"
+                                name="password"
                                 style={{
                                   border: "none",
                                   "border-bottom": "2px solid #ddd",
@@ -256,9 +221,8 @@ const Login = () => {
                                 className="form-control form-control-user inputclassName"
                                 id="exampleInputPassword"
                                 placeholder="Password"
-                                value={formValues.pass}
-                                onChange={handleChange}
-                                onBlur = {handleValidation}
+                                value={formValues.password}
+                                onChange={(e)=>handleChange(e)}
                               />
                               <i
                                 style={{
@@ -270,7 +234,12 @@ const Login = () => {
                                 }}
                                 className="fa fa-unlock-alt common"
                               ></i>
-                              <p style={{ color: "red" }}>{formErrors.pass}</p>
+                              {validator.current.message(
+                              "password",
+                              formValues.password,
+                              "required",
+                              { className: "text-danger" }
+                            )}
                             </div>
 
                             <div className="d-flex align-items-center justify-content-between mb-3">
@@ -289,12 +258,10 @@ const Login = () => {
                               </a>
                             </div>
                             <div className="d-flex align-items-center justify-content-between mb-0">
-                              
-                             
                               <button
                                 type="button"
                                 className="btn btn-custom btn-step mx-0"
-                                disabled={!email || !password}
+                                // disabled={!email || !password}
                                 onClick={submitHandler}
                               >
                                 <i className="fas fa-sign-in-alt mx-lg-1"></i>
