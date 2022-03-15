@@ -3,12 +3,22 @@ import Chart from './components/Chart';
 import RouterPage from './components/RouterPage';
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Storage from './Storage/Storage';
+
+const isLoggedIn = Storage.get("token")
 
 function App() {
   return (
-    <Fragment>
+    <body
+    style={{
+      "background-image": "url(./assets/img/5n.jpg)",
+      height: "100%",
+    }}
+    className={!isLoggedIn ? "load" : ""}
+  >
       <RouterPage />
-    </Fragment>
+      <ToastContainer />
+   </body>
   );
 }
 

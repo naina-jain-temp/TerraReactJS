@@ -99,6 +99,13 @@ body {
   color: #000000;
   background-color: #f8f8f8;
 }
+body section.login_Sec {
+  padding: 90px 0;
+}
+body section.signup_Sec {
+  padding: 60px 0;
+}
+
 .logo {
   max-height: 270px;
 }

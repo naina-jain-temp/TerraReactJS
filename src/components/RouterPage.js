@@ -11,24 +11,26 @@ import Signup2 from "./Signup2";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Logout from "./logout";
+import Header from "./Includes/Header";
 
 const RouterPage = () => {
-  return(
-      <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/step1" element={<Step1 />} />
-            <Route path="/step2" element={<Step2 />} />          
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/sign-up" element={<Signup2 />} />
-            <Route path="/chart" element={<Chart />} />
-            <Route path="/logout" element={<Logout/>} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-      </Router>
+  return (
+    <Router>
+      <Header />
+      <Routes>
+        <Route exact path="/" element={<Index />} />
+        <Route exact path="/about-us" element={<AboutUs />} />
+        <Route exact path="/contact-us" element={<ContactUs />} />
+        <Route exact path="/step1" element={<Step1 />} />
+        <Route exact path="/step2" element={<Step2 />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/sign-up" element={<Signup2 />} />
+        <Route exact path="/chart" element={<Chart />} />
+        <Route exact path="/logout" element={<Logout />} />
+        <Route exact path="*" element={<ErrorPage />} />
+      </Routes>
+    </Router>
   );
 };
 

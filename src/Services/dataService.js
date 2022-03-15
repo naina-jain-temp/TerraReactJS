@@ -100,10 +100,10 @@ client.interceptors.response.use(
         Storage.remove("token");
         window.location.href = "/login"
       }
-      return response.result;
+      return response.data;
     } else {
-      if (response && response.result) {
-        return response.result;
+      if (response && response.data) {
+        return response.data;
       } else {
         return false;
       }
