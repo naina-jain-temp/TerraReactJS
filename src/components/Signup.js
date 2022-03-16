@@ -5,6 +5,8 @@ import authServices from "../Services/authServices";
 import SimpleReactValidator from "simple-react-validator";
 import Storage from "../Storage/Storage";
 
+const passwordValidator =  new RegExp(/^(?=.\d)(?=.[a-z])(?=.[A-Z])[0-9a-zA-Z]{8,}$/); ///^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/;
+
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -32,29 +34,41 @@ const Signup = () => {
 
 
   const handleChange = (e) => {
+    // new RegExp ('/^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/')
     const { name, value } = e.target;
+    var reg =  new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$'); 
+    var test = reg.test(value);
+    if(name === "password"){
+      if (value.trim === "") {
+        SetErrPassword("The Password is required")
+      }else if (!test) {
+        SetErrPassword("Password must contain at least 8 characters with number, capital, small and special character")
+      }else{
+        SetErrPassword(true);
+      }  		
+    }
     setFormValues({ ...formValues, [name]: value });
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // let errorcount = 0;
-    // var pattern = new RegExp(
-    //   /^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/
-    // );
-    // if (!pattern.test(formValues.password)) {
-    //   SetErrPassword(
-    //     "*Password should be one uppercase letter, one lowercase letter, one number and one special character:"
-    //   );
-    //   errorcount++;
-    // } else {
-    //   SetErrPassword("");
-    // }
+    let errorCount = 0;
+    // const value = formValues.password
+    //   if(value.trim ===  ""){
+    //     errorCount++
+    //     SetErrPassword("Password is required")
+    //   }else if(!passwordValidator.test(value)){
+    //     errorCount++
+    //     SetErrPassword("Password must contain at least 8 characters with number, capital, small and special character")
+    //   }else{
+    //     SetErrPassword("")
+    //   }
 
-  //  console.log(errorcount);
+    //   console.log(!passwordValidator.test(value))
+      console.log("errPassword", errPassword)
 
     const formValid = validator.current.allValid();
-    if (formValid) {
+    if (formValid && errPassword === true) {
       let postData = {
         firstname: formValues.fname,
         lastname: formValues.lname,
@@ -64,9 +78,14 @@ const Signup = () => {
         state: formValues.state,
         zip: formValues.zip,
         country: formValues.country,
+        agegroup: formValues.agegroup,
+        gender: formValues.gender,
+        religion: formValues.religion
       };
 
+
       if (termsCondition) {
+        console.log("postData", postData)
         authServices
           .registrationApi(postData)
           .then((res) => {
@@ -139,7 +158,7 @@ const Signup = () => {
                         {validator.current.message(
                           "First Name",
                           formValues.fname,
-                          "required|alpha_space",
+                          "required|alpha",
                           { className: "text-danger" }
                         )}
                       </div>
@@ -171,7 +190,7 @@ const Signup = () => {
                         {validator.current.message(
                           "Last Name",
                           formValues.lname,
-                          "required|alpha_space",
+                          "required|alpha",
                           { className: "text-danger" }
                         )}
                       </div>
@@ -234,12 +253,12 @@ const Signup = () => {
                           }}
                           className="fa fa-unlock-alt common"
                         ></i>
-                        {validator.current.message(
+                        {/* {validator.current.message(
                           "Password",
                           formValues.password,
                           "required",
                           { className: "text-danger" }
-                        )}
+                        )} */}
                         <p className="text-danger">{errPassword}</p>
                       </div>
 
@@ -347,10 +366,10 @@ const Signup = () => {
                           <option value="" selected disabled>
                             --Select Religion--
                           </option>
-                          <option value="Male">Hindu</option>
-                          <option value="Female">Muslim</option>
-                          <option value="Transgender">Sikh</option>
-                          <option value="Transgender">Issai</option>
+                          <option value="Hindu">Hindu</option>
+                          <option value="Muslim">Muslim</option>
+                          <option value="Sikh">Sikh</option>
+                          <option value="Issai">Issai</option>
                         </select>
 
                         <i

@@ -17,41 +17,35 @@ const Login = () => {
 
   const initialValues = { email: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [errPassword, SetErrPassword] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    var reg =  new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$'); 
+    var test = reg.test(value);
+    if(name === "password"){
+      if (value.trim === "") {
+        SetErrPassword("The Password is required")
+      }else if (!test) {
+        SetErrPassword("Password must contain at least 8 characters with number, capital, small and special character")
+      }else{
+        SetErrPassword(true);
+      }  		
+    }
     setFormValues({ ...formValues, [name]: value });
   };
 
+  // function checkPasswordComplexity(pwd) {
+  //   var regularExpression = /^(?=.[0-9])(?=.[a-zA-Z])([a-zA-Z0-9]+)$/;
+  //   var valid = regularExpression.test(pwd);
+  //   return console.log("valid ---> ", valid);
+  // }
+
   const submitHandler = async (event) => {
     event.preventDefault();
-    setIsSubmit(true);
-
-    // const response = await fetch("http://localhost:4000/api/v1/user/signin", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     email: email,
-    //     password: password,
-    //   }),
-    // });
-    // const responseData = await response.json();
-    // if (responseData.success && responseData.statusCode === 200) {
-    //   toast.success("Login Successfully",{position: toast.POSITION.TOP_CENTER})
-    //   window.sessionStorage.setItem("token", responseData.result.token);
-    //   ///ReactSession.set("token", responseData.result.token);
-    //   window.location.href = '/';
-    //    // navigate("/");
-    // }else{
-    //   toast.error(responseData.message,{position: toast.POSITION.TOP_CENTER})
-    // }
-
     const formValid = validator.current.allValid();
 
-    if (formValid) {
+    if (formValid && errPassword === true) {
       let postData = {
         email: formValues.email,
         password: formValues.password,
@@ -167,12 +161,13 @@ const Login = () => {
                             }}
                             className="fa fa-unlock-alt common"
                           ></i>
-                          {validator.current.message(
+                          {/* {validator.current.message(
                             "password",
                             formValues.password,
                             "required",
                             { className: "text-danger" }
-                          )}
+                          )} */}
+                          <p className="text-danger">{errPassword}</p>
                         </div>
 
                         <div className="d-flex align-items-center justify-content-end mb-3">
@@ -208,3 +203,25 @@ const Login = () => {
 };
 
 export default Login;
+
+
+  // const response = await fetch("http://localhost:4000/api/v1/user/signin", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     email: email,
+    //     password: password,
+    //   }),
+    // });
+    // const responseData = await response.json();
+    // if (responseData.success && responseData.statusCode === 200) {
+    //   toast.success("Login Successfully",{position: toast.POSITION.TOP_CENTER})
+    //   window.sessionStorage.setItem("token", responseData.result.token);
+    //   ///ReactSession.set("token", responseData.result.token);
+    //   window.location.href = '/';
+    //    // navigate("/");
+    // }else{
+    //   toast.error(responseData.message,{position: toast.POSITION.TOP_CENTER})
+    // }

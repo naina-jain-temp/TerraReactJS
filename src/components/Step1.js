@@ -4,62 +4,117 @@ import "@psychological-components/plutchik/lib/theme-core.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import "./Step1.css";
+// import {useNavigate} from "react-router-dom"
+// import authServices from "../Services/authServices";
 
 class Step1 extends React.Component {
-  
   constructor(props) {
     super(props);
-    this.token = window.sessionStorage.getItem("token") !== '' && window.sessionStorage.getItem("token") !== undefined && window.sessionStorage.getItem("token") !== null ? true : false;
+    this.token =
+      window.sessionStorage.getItem("token") !== "" &&
+      window.sessionStorage.getItem("token") !== undefined &&
+      window.sessionStorage.getItem("token") !== null
+        ? true
+        : false;
 
     // Initializing the state
-    this.state = { color: "yellow" };
+    this.state = { 
+      color: "yellow", 
+      labelone: "",
+      labeltwo: "",
+      wheel_data: ""
+    };
+    this.stepOneSubmit = this.stepOneSubmit.bind(this);
   }
   componentDidMount() {
-
     $(window).on("load", function () {
-      setTimeout(function(){ $('body').removeClass('load');}, 3000);
-      setTimeout(function(){$('.btn-step.prev').removeAttr("disabled"); }, 1000);
+      setTimeout(function () {
+        $("body").removeClass("load");
+      }, 3000);
+      setTimeout(function () {
+        $(".btn-step.prev").removeAttr("disabled");
+      }, 1000);
     });
-    if($("#drawer").length > 0){
-  
+    if ($("#drawer").length > 0) {
       Plutchik({
         element: "#drawer",
         labels: [
-          ["Acceptance", "Serinity", "Interest", "Annoyance", "Boredom", "Pensiveness", "Distraction", "Apprehension"],
-          ["Trust", "Joy", "Anticipation", "Anger", "Disgust", "Sadness", "Surprise", "Fear"],
-          ["Admiration", "Ecstasy", "Vigilance", "Rage", "Loathing", "Grief", "Amazement", "Terror"],
-          ["Submission", "Love", "Optimism", "Aggressiveness", "Contempt", "Emorse", "Disapproval", "Awe"]
-        ]
+          [
+            "Acceptance",
+            "Serinity",
+            "Interest",
+            "Annoyance",
+            "Boredom",
+            "Pensiveness",
+            "Distraction",
+            "Apprehension",
+          ],
+          [
+            "Trust",
+            "Joy",
+            "Anticipation",
+            "Anger",
+            "Disgust",
+            "Sadness",
+            "Surprise",
+            "Fear",
+          ],
+          [
+            "Admiration",
+            "Ecstasy",
+            "Vigilance",
+            "Rage",
+            "Loathing",
+            "Grief",
+            "Amazement",
+            "Terror",
+          ],
+          [
+            "Submission",
+            "Love",
+            "Optimism",
+            "Aggressiveness",
+            "Contempt",
+            "Emorse",
+            "Disapproval",
+            "Awe",
+          ],
+        ],
       });
     }
-  
-    $("#drawer a").on("click",function(){
-      if($(this)[0].className.baseVal.split('-')[1] != '3'){
-        var clickValue = $(this).attr('title') 
-        window.location.href='/step2?emotion=' + clickValue;
-      }else{
-        $(this)[0].classList.remove('active');
-      }
-      
-    })
-  
-    $(".btn-step.prev").on('click',function(){
-      var currantStep = $(this).attr('tabindex')
-      if(currantStep == -1){
-        window.location.href='steps.html';
-      }
-      setTimeout(function(){$('.btn-step.prev').removeAttr("disabled"); }, 1000);
-    
-    });
-    $(".btn-step.next").on('click',function(){
-      setTimeout(function(){$('.btn-step.prev').removeAttr("disabled"); }, 1000);
-      
-    
-    });
-  
 
+   
 
-    
+    $("#drawer a").on("click", function () {
+      if ($(this)[0].className.baseVal.split("-")[1] != "3") {
+        var clickValue = $(this).attr("title");
+        //this.stepOneSubmit(clickValue);
+        // this.wheel_data(clickValue)
+        // this.setState({
+        //   ...this.state,
+        //   wheel_data: clickValue
+        // })
+        // alert(clickValue)
+        window.location.href = "/step2?emotion=" + clickValue;
+      } else {
+        $(this)[0].classList.remove("active");
+      }
+    });
+
+    $(".btn-step.prev").on("click", function () {
+      var currantStep = $(this).attr("tabindex");
+      if (currantStep == -1) {
+        window.location.href = "steps.html";
+      }
+      setTimeout(function () {
+        $(".btn-step.prev").removeAttr("disabled");
+      }, 1000);
+    });
+    $(".btn-step.next").on("click", function () {
+      setTimeout(function () {
+        $(".btn-step.prev").removeAttr("disabled");
+      }, 1000);
+    });
 
     var wheel = $("#drawer");
     var border = parseInt(wheel.css("border-width"));
@@ -67,19 +122,18 @@ class Step1 extends React.Component {
     var center = radius - border / 2;
     var total = 12;
     var slice = (2 * Math.PI) / total;
-    
 
     const Draggable = window.Draggable;
     Draggable.create(wheel, {
       type: "rotation",
       throwProps: true,
       minimumMovement: 10,
-      onClick: function(e) {    
-          var num = e.target.dataset.num;    
-          console.log('@@@');
+      onClick: function (e) {
+        var num = e.target.dataset.num;
+        console.log("@@@");
         // if (num) { info.text("Clicked Box " + num); }
-      }
-      });    
+      },
+    });
 
     // Changing the state after 2 sec
     // from the time when the component
@@ -88,16 +142,58 @@ class Step1 extends React.Component {
       this.setState({ color: "red" });
     }, 2000);
   }
+
+  
+  changeHandler = (e) => {
+    // this.setState({
+    //   ...this.state,
+    //   [e.target.name]: e.target.value
+    // })
+
+    this.setState({
+      [e.target.name]: e.target.value
+  })
+  }
+
+  stepOneSubmit (value) {
+    let postData = {
+      lableone: this.state.labelone,
+      labletwo: this.state.labeltwo,
+      wheel_data: value,
+      check_api_key: "",
+    }
+    console.log("postData ----> ", postData)
+      // authServices.stepOneApi(postData).then((res)=>{
+      //   if(res.statusCode === 200){
+      //     console.log(res.result);
+      //   }else{
+      //     toast.error(res.message, {position : "top-center"})
+      //   }
+      // }).catch((Err)=>{
+      //   console.log(Err);
+      // })
+  }
+
   render() {
+    console.log("this.state", this.state)
     return (
       <div>
         <main className="about">
           <section>
             <div className="container-md">
-              <div className="row justify-content-center ">
-                <div className="col-md-12  rounded mt-5">
-                  <div>
-                    <div id="drawer" className="text-center m-auto"></div>
+              <div className="row justify-content-center align-items-center">
+                <div className="col-md-3">
+                 <div className="customInput card shadow border">
+                 <div className="form-group card-body">
+                   <div className="d-flex align-items-center">
+                   <i className="fa fa-bookmark text-primary me-3"></i> <label>First Label</label>
+                   </div>
+                    <input type="text" name="labelone" className="form-control"  onChange={this.changeHandler} />
+                  </div>
+                 </div>
+                </div>
+                <div className="col-md-6  rounded mt-5">
+                <div id="drawer" className="text-center m-auto"></div>
                     <div className="mt-1 text-center title">
                       <h3
                         style={{ "font-size": "31px", color: "#201c6f" }}
@@ -106,17 +202,24 @@ class Step1 extends React.Component {
                         Please click free to open up
                       </h3>
                     </div>
+                </div>
+                <div className="col-md-3">
+                <div className="customInput card shadow border">
+                <div className="form-group card-body">
+                <div className="d-flex align-items-center">
+                   <i className="fa fa-bookmark text-primary me-3"></i> <label>Second Label</label>
+                   </div>
+                
+                    <input type="text" name="labeltwo" className="form-control" onChange={this.changeHandler} />
                   </div>
+                </div>
                 </div>
               </div>
             </div>
           </section>
         </main>
         <Link to="/step2">
-        <div
-          id="drawer"
-          class="text-center m-auto"
-        ></div>
+          <div id="drawer" class="text-center m-auto"></div>
         </Link>
       </div>
     );
@@ -124,18 +227,12 @@ class Step1 extends React.Component {
 }
 export default Step1;
 
-
-
-
-
-
 // import React from "react";
 // import Plutchik from "@psychological-components/plutchik";
 // import "@psychological-components/plutchik/lib/theme-core.css";
 // import $ from "jquery";
 // import { Link } from "react-router-dom";
 // import "./Step1.css";
-
 
 // const Step1 = () => {
 
@@ -158,13 +255,13 @@ export default Step1;
 
 //   $("#drawer a").on("click",function(){
 //     if($(this)[0].className.baseVal.split('-')[1] != '3'){
-//       var clickValue = $(this).attr('title')  
+//       var clickValue = $(this).attr('title')
 //       alert(clickValue);
 //       window.location.href='step-2.html';
 //     }else{
 //       $(this)[0].classList.remove('active');
 //     }
-    
+
 //   })
 
 //   $(".btn-step.prev").on('click',function(){
@@ -173,17 +270,12 @@ export default Step1;
 //       window.location.href='steps.html';
 //     }
 //     setTimeout(function(){$('.btn-step.prev').removeAttr("disabled"); }, 1000);
-  
+
 //   });
 //   $(".btn-step.next").on('click',function(){
 //     setTimeout(function(){$('.btn-step.prev').removeAttr("disabled"); }, 1000);
-    
-  
+
 //   });
-
-
-
-  
 
 //   var wheel = $("#drawer");
 //   var border = parseInt(wheel.css("border-width"));
@@ -197,12 +289,12 @@ export default Step1;
 //     type: "rotation",
 //     throwProps: true,
 //     minimumMovement: 10,
-//     onClick: function(e) {    
-//         var num = e.target.dataset.num;    
+//     onClick: function(e) {
+//         var num = e.target.dataset.num;
 //         console.log('@@@');
 //       // if (num) { info.text("Clicked Box " + num); }
 //     }
-//     });    
+//     });
 
 //   // Changing the state after 2 sec
 //   // from the time when the component

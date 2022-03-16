@@ -1,4 +1,32 @@
 #drawer{
-    width:35%;
-    height: 35%;
+    width: 75%;
+    height: 50%;
+}
+
+.customInput label{
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+
+.customInput {
+    box-shadow: 0px 0px 0px 0px #ddd;
+}
+.customInput input{
+    border: none;
+    border-bottom: 1px solid #d60e83;
+    background: transparent;
+    border-radius: 0;
+    transition: 0.2s all ease-in-out;
+}
+
+.customInput input:hover{
+    border-color: #3d3090;
+}
+.customInput input:active, .customInput input:focus{
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #3d3090;
+    outline: none;
+    box-shadow: none;
 }
