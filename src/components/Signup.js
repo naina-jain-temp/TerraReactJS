@@ -52,21 +52,7 @@ const Signup = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    let errorCount = 0;
-    // const value = formValues.password
-    //   if(value.trim ===  ""){
-    //     errorCount++
-    //     SetErrPassword("Password is required")
-    //   }else if(!passwordValidator.test(value)){
-    //     errorCount++
-    //     SetErrPassword("Password must contain at least 8 characters with number, capital, small and special character")
-    //   }else{
-    //     SetErrPassword("")
-    //   }
-
-    //   console.log(!passwordValidator.test(value))
-      console.log("errPassword", errPassword)
-
+  
     const formValid = validator.current.allValid();
     if (formValid && errPassword === true) {
       let postData = {
@@ -259,7 +245,7 @@ const Signup = () => {
                           "required",
                           { className: "text-danger" }
                         )} */}
-                        <p className="text-danger">{errPassword}</p>
+                        <small className="text-danger">{errPassword}</small>
                       </div>
 
                       <div className="form-group col-md-6 mb-3">

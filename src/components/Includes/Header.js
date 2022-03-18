@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Storage from "../../Storage/Storage";
 
 const Header = () => {
@@ -36,37 +36,37 @@ const Header = () => {
                 style={{ "--bs-scroll-height": "100px" }}
               >
                 <li className="nav-item">
-                  <Link to="/" className="nav-link active" aria-current="page">
+                  <NavLink to="/" className="nav-link" aria-current="page">
                     Home
-                  </Link>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to="/about-us" className="nav-link">
+                  <NavLink to="/about-us" className="nav-link">
                     About Us
-                  </Link>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to="/contact-us" className="nav-link">
+                  <NavLink to="/contact-us" className="nav-link">
                     Contact Us
-                  </Link>
+                  </NavLink>
                 </li>
                 {!isLoggedIn ? (
                   <>
                     <li className="nav-item">
-                      <Link
+                      <NavLink
                         to="/login"
-                        className="btn btn-outline-light px-4 rounded-pill active"
+                        className="btn btn-outline-light px-4 rounded-pill"
                       >
                         Login
-                      </Link>
+                      </NavLink>
                     </li>
                     <li className="nav-item">
-                      <Link
+                      <NavLink
                         to="/signup"
                         className="btn btn-outline-light px-4 rounded-pill"
                       >
                         Signup
-                      </Link>
+                      </NavLink>
                     </li>
                   </>
                 ) : (

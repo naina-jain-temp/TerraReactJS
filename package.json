@@ -15,6 +15,7 @@
     "crypto-js": "^4.1.1",
     "faker": "^6.6.6",
     "jquery": "^3.6.0",
+    "public-ip": "^5.0.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
     "react-chartjs-2": "^4.0.1",

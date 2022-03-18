@@ -128,12 +128,14 @@ const Login = () => {
                             }}
                             className="far fa-envelope common"
                           ></i>
-                          {validator.current.message(
+                         <small>
+                         {validator.current.message(
                             "email",
                             formValues.email,
                             "required|email",
                             { className: "text-danger" }
                           )}
+                         </small>
                         </div>
                         <div className="form-group mt-4 mb-4">
                           <input
@@ -167,7 +169,7 @@ const Login = () => {
                             "required",
                             { className: "text-danger" }
                           )} */}
-                          <p className="text-danger">{errPassword}</p>
+                          <p className="text-danger"><small>{errPassword}</small></p>
                         </div>
 
                         <div className="d-flex align-items-center justify-content-end mb-3">
