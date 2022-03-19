@@ -10,10 +10,6 @@ const isLoggedIn = Storage.get("token")
 function App() {
   return (
     <body
-    style={{
-      "background-image": "url(./assets/img/5n.jpg)",
-      height: "100%",
-    }}
     className={!isLoggedIn ? "load" : ""}
   >
       <RouterPage />

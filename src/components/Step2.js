@@ -11,12 +11,14 @@ import { Link } from "react-router-dom";
 import authServices from "../Services/authServices";
 import Storage from "../Storage/Storage";
 import SimpleReactValidator from "simple-react-validator";
+import { Loader } from "./Loader";
 //ReactSession.setStoreType("localStorage");
 
 const Step2 = () => {
   const [submitLike, setSubmitLike] = useState("");
   const [submitRating, setSubmitRating] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false)
   const [, forceUpdate] = useState("");
   const validator = useRef(
     new SimpleReactValidator({ autoForceUpdate: { forceUpdate: forceUpdate } })
@@ -38,14 +40,16 @@ const Step2 = () => {
     const formValid = validator.current.allValid();
 
     if (formValid) {
+      setIsLoading(true)
       authServices
         .submitResponseApi(data)
         .then((res) => {
           if (res.statusCode === 200) {
-            console.log(res.result);
+            setIsLoading(false)
             navigate("/chart")
             toast.success(res.result);
           } else {
+            setIsLoading(false)
             toast.error(res.message, { position: "top-center" });
           }
         })
@@ -336,6 +340,7 @@ const Step2 = () => {
           </div>
         </div>
       </section>
+      <Loader show={isLoading} />
     </main>
   );
 };

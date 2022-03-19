@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import authServices from "../Services/authServices";
 import SimpleReactValidator from "simple-react-validator";
 import Storage from "../Storage/Storage";
+import { Loader } from "./Loader";
 
 const passwordValidator =  new RegExp(/^(?=.\d)(?=.[a-z])(?=.[A-Z])[0-9a-zA-Z]{8,}$/); ///^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/;
 
@@ -29,6 +30,7 @@ const Signup = () => {
     religion: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false)
   const [errPassword, SetErrPassword] = useState(false);
   const [termsCondition, setTermsCondition] = useState(false);
 
@@ -71,17 +73,19 @@ const Signup = () => {
 
 
       if (termsCondition) {
-        console.log("postData", postData)
+        setIsLoading(true)
         authServices
           .registrationApi(postData)
           .then((res) => {
             if (res.statusCode === 200) {
+              setIsLoading(false)
               Storage.set("token", res.result);
               toast.success("Signup Successfully. Ridirecting to Login", {
                 position: "top-center",
               });
               window.location.href = "/login";
             } else {
+              setIsLoading(false)
               toast.error(res.message, { position: "top-center" });
             }
           })
@@ -539,6 +543,7 @@ const Signup = () => {
           </div>
         </div>
       </section>
+      <Loader show={isLoading} />
     </div>
   );
 };

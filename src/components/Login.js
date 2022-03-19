@@ -4,6 +4,7 @@ import {  toast } from "react-toastify";
 import authServices from "../Services/authServices";
 import Storage from "../Storage/Storage";
 import SimpleReactValidator from "simple-react-validator";
+import { Loader } from "./Loader";
 
 toast.configure();
 
@@ -18,6 +19,7 @@ const Login = () => {
   const initialValues = { email: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
   const [errPassword, SetErrPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,12 +37,6 @@ const Login = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  // function checkPasswordComplexity(pwd) {
-  //   var regularExpression = /^(?=.[0-9])(?=.[a-zA-Z])([a-zA-Z0-9]+)$/;
-  //   var valid = regularExpression.test(pwd);
-  //   return console.log("valid ---> ", valid);
-  // }
-
   const submitHandler = async (event) => {
     event.preventDefault();
     const formValid = validator.current.allValid();
@@ -50,11 +46,12 @@ const Login = () => {
         email: formValues.email,
         password: formValues.password,
       };
-
+      setIsLoading(true)
       authServices
         .loginApi(postData)
         .then((res) => {
           if (res.statusCode === 200) {
+            setIsLoading(false)
             toast.success("Login Successfully", { position: "top-center" });
             Storage.set("token", JSON.stringify(res.result));
             // window.location.href = "/"
@@ -62,6 +59,7 @@ const Login = () => {
             navigate("/");
             window.location.reload(true);
           } else {
+            setIsLoading(false)
             toast.error(res.message, { position: "top-center" });
           }
         })
@@ -200,30 +198,9 @@ const Login = () => {
           </div>
         </div>
       </section>
+      <Loader show={isLoading} />
     </div>
   );
 };
 
 export default Login;
-
-
-  // const response = await fetch("http://localhost:4000/api/v1/user/signin", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     email: email,
-    //     password: password,
-    //   }),
-    // });
-    // const responseData = await response.json();
-    // if (responseData.success && responseData.statusCode === 200) {
-    //   toast.success("Login Successfully",{position: toast.POSITION.TOP_CENTER})
-    //   window.sessionStorage.setItem("token", responseData.result.token);
-    //   ///ReactSession.set("token", responseData.result.token);
-    //   window.location.href = '/';
-    //    // navigate("/");
-    // }else{
-    //   toast.error(responseData.message,{position: toast.POSITION.TOP_CENTER})
-    // }

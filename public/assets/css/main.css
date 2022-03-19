@@ -80,7 +80,8 @@ html, body {
   line-height: 1.4;
   letter-spacing: 1px;
   color: #000000;
-  background-color: #f8f8f8;
+  background-image: linear-gradient(to bottom right,#fafdff75,#ffffff70),url('../img/5n.jpg');
+  background-size: cover;
 }
 .logo{max-height: 270px;}
 main {
@@ -89,7 +90,7 @@ main {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-main::before {
+/* main::before {
   position: absolute;
   content: "";
   top: 0;
@@ -103,9 +104,9 @@ main::before {
   filter: contrast(0.5);
   /*filter: grayscale(1);
   opacity: 0.15;*/
-  pointer-events: none;
-}
-main.about::before {
+  /* pointer-events: none; */
+/* } */ */
+/* main.about::before {
   position: absolute;
   content: "";
   top: 0;
@@ -119,7 +120,7 @@ main.about::before {
   filter: grayscale(1);
   opacity: 0.15;
   pointer-events: none;
-}
+} */
 a {
   text-decoration: none;
 }

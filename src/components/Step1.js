@@ -8,6 +8,7 @@ import Storage from "../Storage/Storage";
 import publicIp from "public-ip";
 import SimpleReactValidator from "simple-react-validator";
 import { toast } from "react-toastify";
+import { Loader } from "./Loader";
 
 const Step1 = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Step1 = () => {
     labeltwo: "",
     wheel_data: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [ipAddress, setIpAddress] = useState();
   const [emotions, setEmotions] = useState();
 
@@ -108,15 +110,18 @@ const Step1 = () => {
         emotionFrom: stepData.labelone,
         emotionBy: stepData.labeltwo,
       };
+      setIsLoading(true)
       authServices
         .checkResponseApi(postData)
         .then((res) => {
           if (res.statusCode === 200) {
-            console.log(res.result);
+            setIsLoading(false)
             navigate(`/step2?emotion=${value}`);
             Storage.set("emotion", data);
           } else {
-            toast.error(res.message, { position: "top-center" });
+            // toast.error(res.message, { position: "top-center" });
+            setIsLoading(false)
+            toast.error("Something Went Wrong", { position: "top-center" })
           }
         })
         .catch((Err) => {
@@ -225,6 +230,9 @@ const Step1 = () => {
           </div>
         </section>
       </main>
+      <Loader 
+      show={isLoading}
+      />
     </div>
   );
 };
