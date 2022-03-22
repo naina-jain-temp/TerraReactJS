@@ -37,9 +37,10 @@ const Login = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const formValid = validator.current.allValid();
   const submitHandler = async (event) => {
     event.preventDefault();
-    const formValid = validator.current.allValid();
+   
 
     if (formValid && errPassword === true) {
       let postData = {
@@ -180,7 +181,7 @@ const Login = () => {
                           <button
                             type="button"
                             className="btn btn-custom btn-step mx-0"
-                            // disabled={!email || !password}
+                            disabled={!formValid}
                             onClick={submitHandler}
                           >
                             <i className="fas fa-sign-in-alt mx-lg-1"></i>

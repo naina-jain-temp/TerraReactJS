@@ -3,22 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "./Step2.css";
 import { Navigation } from "swiper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
 import authServices from "../Services/authServices";
 import Storage from "../Storage/Storage";
 import SimpleReactValidator from "simple-react-validator";
 import { Loader } from "./Loader";
-//ReactSession.setStoreType("localStorage");
 
 const Step2 = () => {
   const [submitLike, setSubmitLike] = useState("");
   const [submitRating, setSubmitRating] = useState("");
-
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [backActive, setBackActive] = useState(true)
   const [, forceUpdate] = useState("");
   const validator = useRef(
     new SimpleReactValidator({ autoForceUpdate: { forceUpdate: forceUpdate } })
@@ -40,16 +37,16 @@ const Step2 = () => {
     const formValid = validator.current.allValid();
 
     if (formValid) {
-      setIsLoading(true)
+      setIsLoading(true);
       authServices
         .submitResponseApi(data)
         .then((res) => {
           if (res.statusCode === 200) {
-            setIsLoading(false)
-            navigate("/chart")
+            setIsLoading(false);
+            navigate("/chart");
             toast.success(res.result);
           } else {
-            setIsLoading(false)
+            setIsLoading(false);
             toast.error(res.message, { position: "top-center" });
           }
         })
@@ -60,6 +57,19 @@ const Step2 = () => {
       validator.current.showMessages();
     }
   };
+
+  const slideHandler = (e) => {
+    let prev = e.activeIndex;
+    if(prev === 1){
+     setBackActive(false)
+    }else{
+      setBackActive(true)
+    }
+  };
+
+  const backHandler = () => {
+    navigate('/step1')
+  }
 
   return (
     <main className="about">
@@ -75,8 +85,16 @@ const Step2 = () => {
                       navigation={true}
                       modules={[Navigation]}
                       className="mySwiper"
+                      onSlideChange={(e) => slideHandler(e)}
                     >
                       <SwiperSlide>
+                        {
+                          backActive &&
+                          <a href="javascript:void(0)" className="swiperback" onClick={()=>backHandler()}>
+                            
+                          </a>
+                        }
+                        
                         <div className="step step-1">
                           <div className="mb-4 text-center title">
                             <h3>How do you feel about (x) right now?</h3>
@@ -115,10 +133,15 @@ const Step2 = () => {
                             "Likes",
                             submitLike,
                             "required",
-                            { className: "text-danger bg-light text-center mt-3 d-inline-block" }
+                            {
+                              className:
+                                "text-danger bg-light text-center mt-3 d-inline-block",
+                            }
                           )}
                         </div>
                       </SwiperSlide>
+                      {
+                        submitLike &&
                       <SwiperSlide>
                         <div className="step step-2">
                           <div className="mb-4 text-center title">
@@ -332,6 +355,7 @@ const Step2 = () => {
                           </div>
                         </div>
                       </SwiperSlide>
+                      }
                     </Swiper>
                   </div>
                 </div>

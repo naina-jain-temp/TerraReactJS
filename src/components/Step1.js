@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Plutchik from "@psychological-components/plutchik";
 import "@psychological-components/plutchik/lib/theme-core.css";
-import "./Step1.css";
 import authServices from "../Services/authServices";
 import { Navigate, useNavigate } from "react-router";
 import Storage from "../Storage/Storage";
@@ -25,6 +24,7 @@ const Step1 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [ipAddress, setIpAddress] = useState();
   const [emotions, setEmotions] = useState();
+  // const [isDisabled, setIsDisabled] = useState(true)
 
   useEffect(() => {
     async function GetAddress() {
@@ -84,6 +84,8 @@ const Step1 = () => {
     });
   }, []);
 
+  
+
   const emotionClick = () => {
     let data = document.querySelector("#element svg");
     let Anchors = data.getElementsByTagName("a");
@@ -92,13 +94,18 @@ const Step1 = () => {
       var str = Anchors[i].getAttribute("class");
       if (str.includes("active")) {
         value = Anchors[i].getAttribute("title");
+      //  Anchors[i].classList.add("customactive");
       }
+      // else{
+      //   Anchors[i].classList.remove("customactive");
+      // }
     }
-    setEmotions(value);
-  };
+    setEmotions(value)
+  }
 
-  function submitHandler(value) {
-    const formValid = validator.current.allValid();
+  const formValid = validator.current.allValid();
+
+  function submitHandler() {
     if (formValid) {
       let postData = {
         emotion: emotions,
@@ -110,18 +117,20 @@ const Step1 = () => {
         emotionFrom: stepData.labelone,
         emotionBy: stepData.labeltwo,
       };
-      setIsLoading(true)
+      setIsLoading(true);
       authServices
         .checkResponseApi(postData)
         .then((res) => {
           if (res.statusCode === 200) {
-            setIsLoading(false)
-            navigate(`/step2?emotion=${value}`);
+            setIsLoading(false);
+            navigate(`/step2?emotion=${emotions}`);
             Storage.set("emotion", data);
-          } else {
-            // toast.error(res.message, { position: "top-center" });
-            setIsLoading(false)
-            toast.error("Something Went Wrong", { position: "top-center" })
+          } else if(res.statusCode === 401 || res.statusCode === 403 || res.statusCode === 409) {
+            toast.error(res.message, { position: "top-center" });
+            setIsLoading(false);
+          }else{
+            toast.error("Something Went Wrong", { position: "top-center" });
+            setIsLoading(false);
           }
         })
         .catch((Err) => {
@@ -144,6 +153,7 @@ const Step1 = () => {
                   onClick={submitHandler}
                   //onClick={() => navigate("/chart")}
                   className="btn btn-custom btn-step mx-0"
+                  disabled={!formValid}
                 >
                   {/* <i className="fas fa-sign-in-alt mx-lg-1"></i>{" "} */}
                   Next
@@ -230,10 +240,96 @@ const Step1 = () => {
           </div>
         </section>
       </main>
-      <Loader 
-      show={isLoading}
-      />
+      <Loader show={isLoading} />
     </div>
   );
 };
 export default Step1;
+
+// const emotionClick = () => {
+//   let data = document.querySelector("#element svg");
+//   let Anchors = data.getElementsByTagName("a");
+//   let value = "";
+//   for (var i = 0; i < Anchors.length; i++) {
+//     var str = Anchors[i].getAttribute("class");
+//     if (str.includes("active")) {
+//       console.log(str);
+//       value = Anchors[i].getAttribute("title");
+//      Anchors[i].classList.add("customactive");
+//     }else{
+//       Anchors[i].classList.remove("customactive");
+//     }
+//   }
+//   // Anchors.classList.add("customactive" + value);
+//   setEmotions(value);
+// };
+
+
+//const emotionClick = () => {
+    // alert("hello");
+    // let data = document.querySelector("#element svg");
+    // let Anchors = data.getElementsByTagName("a");
+    // let value = "";
+    // let blank_array = [];
+    // let activevalue = "";
+    // let str = [];
+    // for (var i = 0; i < Anchors.length; i++) {
+    //   str.push(Anchors[i].getAttribute("class"));
+    //   blank_array.push(Anchors[i].getAttribute("title"));
+
+      // if (str.includes("active")) {
+      //   activevalue = Anchors[i].getAttribute("title");
+      // }
+      // console.log("activevalue", activevalue);
+
+      // strarray.filter((item, ind)=>{
+      //   console.log("strarray[ind]", strarray[ind]);
+      //   extract = strarray[ind].slice(7);
+      //   if(item.includes(extract)){
+      //     activevalue = Anchors[i].getAttribute("title")
+      //   }
+      // })
+
+      // for (let item in strarray){
+      //   var extract = strarray[item].slice(7);
+      //   if(item.includes(extract)){
+      //     activevalue = Anchors[i].getAttribute("title")
+      //   }
+      // }
+   // }
+
+    // console.log("str ---> ", str);
+    // console.log("Anchors.length", Anchors.length);
+
+    // str &&
+    //   str.length > 0 &&
+    //   str.map((val, ind) => {
+    //     if (val.includes("active")) {
+    //       activevalue = Anchors[ind].getAttribute("title");
+    //       if (blank_array[ind] === activevalue) {
+    //         Anchors[ind].classList.add("customactive");
+    //       } else {
+    //         Anchors[ind].classList.remove("customactive");
+    //       }
+    //     }
+    //   });
+
+    //   console.log("activevalue", activevalue)
+
+    // blank_array &&
+    //   blank_array.length > 0 &&
+    //   blank_array.filter((item, i) => {
+    //     if (activevalue.includes(item)) {
+    //       value = activevalue;
+    //       Anchors[i].classList.add("customactive");
+    //     } else {
+    //       Anchors[i].classList.remove("customactive");
+    //     }
+    //   });
+    // console.log("str ---> ", str)
+    // console.log("value ---> ", value)
+    // console.log("activevalue", activevalue)
+    // console.log("blank_array", blank_array)
+    // Anchors.classList.add("customactive" + value);
+   // setEmotions(value);
+  //};

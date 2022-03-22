@@ -6,7 +6,9 @@ import SimpleReactValidator from "simple-react-validator";
 import Storage from "../Storage/Storage";
 import { Loader } from "./Loader";
 
-const passwordValidator =  new RegExp(/^(?=.\d)(?=.[a-z])(?=.[A-Z])[0-9a-zA-Z]{8,}$/); ///^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/;
+const passwordValidator = new RegExp(
+  /^(?=.\d)(?=.[a-z])(?=.[A-Z])[0-9a-zA-Z]{8,}$/
+); ///^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/;
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -30,32 +32,33 @@ const Signup = () => {
     religion: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [errPassword, SetErrPassword] = useState(false);
-  const [termsCondition, setTermsCondition] = useState(false);
-
+  const [termsCondition, setTermsCondition] = useState();
 
   const handleChange = (e) => {
     // new RegExp ('/^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[^\w\s]).{8,}$/')
     const { name, value } = e.target;
-    var reg =  new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$'); 
+    var reg = new RegExp("^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$");
     var test = reg.test(value);
-    if(name === "password"){
+    if (name === "password") {
       if (value.trim === "") {
-        SetErrPassword("The Password is required")
-      }else if (!test) {
-        SetErrPassword("Password must contain at least 8 characters with number, capital, small and special character")
-      }else{
+        SetErrPassword("The Password is required");
+      } else if (!test) {
+        SetErrPassword(
+          "Password must contain at least 8 characters with number, capital, small and special character"
+        );
+      } else {
         SetErrPassword(true);
-      }  		
+      }
     }
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const formValid = validator.current.allValid();
   const submitHandler = (e) => {
     e.preventDefault();
-  
-    const formValid = validator.current.allValid();
+
     if (formValid && errPassword === true) {
       let postData = {
         firstname: formValues.fname,
@@ -68,33 +71,28 @@ const Signup = () => {
         country: formValues.country,
         agegroup: formValues.agegroup,
         gender: formValues.gender,
-        religion: formValues.religion
+        religion: formValues.religion,
       };
 
-
-      if (termsCondition) {
-        setIsLoading(true)
-        authServices
-          .registrationApi(postData)
-          .then((res) => {
-            if (res.statusCode === 200) {
-              setIsLoading(false)
-              Storage.set("token", res.result);
-              toast.success("Signup Successfully. Ridirecting to Login", {
-                position: "top-center",
-              });
-              window.location.href = "/login";
-            } else {
-              setIsLoading(false)
-              toast.error(res.message, { position: "top-center" });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        toast.info("Please check terms & services", { position: "top-center" });
-      }
+      setIsLoading(true);
+      authServices
+        .registrationApi(postData)
+        .then((res) => {
+          if (res.statusCode === 200) {
+            setIsLoading(false);
+            Storage.set("token", res.result);
+            toast.success("Signup Successfully. Ridirecting to Login", {
+              position: "top-center",
+            });
+            window.location.href = "/login";
+          } else {
+            setIsLoading(false);
+            toast.error(res.message, { position: "top-center" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       validator.current.showMessages();
     }
@@ -370,7 +368,8 @@ const Signup = () => {
                             "font-size": "17px",
                             color: "#101d6b",
                           }}
-                          class="fa fa-plus common" aria-hidden="true"
+                          class="fa fa-plus common"
+                          aria-hidden="true"
                         ></i>
                         {validator.current.message(
                           "religion",
@@ -505,7 +504,7 @@ const Signup = () => {
                         {validator.current.message(
                           "City",
                           formValues.zip,
-                          "required|alpha",
+                          "required|alpha_num",
                           { className: "text-danger" }
                         )}
                       </div>
@@ -516,12 +515,18 @@ const Signup = () => {
                           className="form-check-input"
                           type="checkbox"
                           id="gridCheck"
-                          onClick={() => setTermsCondition(true)}
+                          onClick={() => setTermsCondition("checked")}
                         />
                         <label className="form-check-label" for="gridCheck">
                           I agree to terms and services.
                         </label>
                       </div>
+                      {validator.current.message(
+                        "Terms & service",
+                        termsCondition,
+                        "required",
+                        { className: "text-danger" }
+                      )}
                     </div>
                     <div
                       className="form-group"
@@ -531,7 +536,7 @@ const Signup = () => {
                         type="submit"
                         className="btn btn-custom btn-step mx-0"
                         // onClick={submitHandler}
-                        // disabled={termsCondition === true ? true : false }
+                        disabled={!formValid}
                       >
                         <i className="fas fa-save mx-lg-1"></i> Save
                       </button>
