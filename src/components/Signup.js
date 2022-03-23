@@ -84,7 +84,7 @@ const Signup = () => {
             toast.success("Signup Successfully. Ridirecting to Login", {
               position: "top-center",
             });
-            window.location.href = "/login";
+            window.location.href = "/";
           } else {
             setIsLoading(false);
             toast.error(res.message, { position: "top-center" });

@@ -950,6 +950,14 @@ button.btn.btn-transparent:focus {
   width: 100px;
 }
 
+.customOtp {
+  width: 10% !important;
+}
+.customOtp input {
+  width: 90% !important;
+  height: 40px !important;
+}
+
 /* svg.plutchik a.active path {
   fill: none !important;
 } */

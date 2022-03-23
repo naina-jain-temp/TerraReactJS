@@ -8,6 +8,18 @@ const authServices = {
     return DataService.post("/v1/user/signup", data);
   },
 
+  sendMailapi: async (data) => {
+    return DataService.post("/v1/user/sendEmail", data);
+  },
+
+  verifyOTPapi: async (data) => {
+    return DataService.post("/v1/user/verifyOtp", data);
+  },
+
+  resetPasswordApi: async (data) => {
+    return DataService.post("/v1/user/changePassword", data);
+  },
+
   checkResponseApi: async (data) => {
     return DataService.post("/v1/user/checkResponseValidity", data);
   },

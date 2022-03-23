@@ -9,15 +9,20 @@ const client = axios.create({
 });
 
 const header = () => {
-  let auth_token = Storage.get("token").token;
+  let auth_token = "";
+  if(Storage.get("token").token){
+    auth_token = Storage.get("token").token;
+  }
+  if(Storage.get("otptoken").token){
+    auth_token = Storage.get("otptoken").token;
+  }
   let headers = {
     "Content-Type": "application/json",
     // Accept: "application/json",
     // crossDomain: true,
   };
-
   if (auth_token) {
-    headers["Authorization"] = auth_token;
+    headers["token"] = auth_token;  
   }
   return headers;
 };

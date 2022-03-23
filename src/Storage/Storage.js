@@ -16,7 +16,7 @@ class Storage {
 
 	static remove(key) {
 		window.sessionStorage.removeItem(key);
-		if (key === 'token') {
+		if (key === 'token' || key === "otptoken") {
 			window.location.href = '/login';
 		}
 	}

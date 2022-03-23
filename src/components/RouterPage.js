@@ -12,6 +12,8 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Logout from "./logout";
 import Header from "./Includes/Header";
+import ForgetPassword from "./Auth/ForgetPassword";
+import ResetPassword from "./Auth/ResetPassword";
 
 const RouterPage = () => {
   return (
@@ -19,6 +21,9 @@ const RouterPage = () => {
       <Header />
       <Routes>
         <Route exact path="/" element={<Index />} />
+        <Route exact path="/forget-password" element={<ForgetPassword />} />
+        <Route exact path="/reset-password" element={<ResetPassword />} />
+        
         <Route exact path="/about-us" element={<AboutUs />} />
         <Route exact path="/contact-us" element={<ContactUs />} />
         <Route exact path="/step1" element={<Step1 />} />
