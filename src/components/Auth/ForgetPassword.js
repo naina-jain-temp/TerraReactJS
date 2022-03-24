@@ -33,7 +33,7 @@ const ForgetPassword = () => {
             toast.success(res.result, { position: "top-center" });
           } else {
             setIsLoading(false);
-            toast.error(res.result, { position: "top-center" });
+            toast.error(res.message, { position: "top-center" });
           }
         })
         .catch((err) => {

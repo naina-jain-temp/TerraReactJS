@@ -41,7 +41,7 @@ export const OtpModal = ({ show, close, emailvalue, resendHandler }) => {
             });
           } else {
             setIsLoading(false)
-            toast.error(res.result, { position: "top-center" });
+            toast.error(res.message, { position: "top-center" });
           }
         })
         .catch((err) => {

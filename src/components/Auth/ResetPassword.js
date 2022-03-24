@@ -46,12 +46,12 @@ const ResetPassword = () => {
         .resetPasswordApi(data)
         .then((res) => {
           if (res.statusCode === 200) {
+            toast.success(res.result, { position: "top-center" });
             setIsLoading(false)
             Storage.remove("otptoken");
-            toast.success(res.result, { position: "top-center" });
           } else {
             setIsLoading(false)
-            toast.error(res.result, { position: "top-center" });
+            toast.error(res.message, { position: "top-center" });
           }
         })
         .catch((err) => {
