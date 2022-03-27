@@ -84,7 +84,7 @@ const Login = () => {
             <div className="row justify-content-center h-100 align-items-center ">
               <div className="col-lg-8 col-md-9 shadow-lg rounded bg-pink">
                 <div className="row">
-                  <div className="col-sm-6  text-center m-auto p-4">
+                  <div className="col-sm-6  text-center m-auto">
                     <div className="p-3">
                       <a className="navbar-brand" href="index.html">
                         <img

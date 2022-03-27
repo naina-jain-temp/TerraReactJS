@@ -107,10 +107,7 @@ const Signup = () => {
               <span id="default-title">Create Account</span>
             </h1>
             <div
-              style={{
-                color: "#201c6f",
-                "text-align": "center",
-              }}
+            className="signuptext"
             >
               Already have an account? <Link to="/login">Login</Link>
             </div>

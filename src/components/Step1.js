@@ -8,6 +8,7 @@ import publicIp from "public-ip";
 import SimpleReactValidator from "simple-react-validator";
 import { toast } from "react-toastify";
 import { Loader } from "./Loader";
+import { EmotionArray } from "./WheelofEmotion/EmotionArray";
 
 const Step1 = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Step1 = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [ipAddress, setIpAddress] = useState();
   const [emotions, setEmotions] = useState();
+  const [emotionList, setEmotionList] = useState(EmotionArray)
   // const [isDisabled, setIsDisabled] = useState(true)
 
   useEffect(() => {
@@ -84,24 +86,47 @@ const Step1 = () => {
     });
   }, []);
 
-  
+  const emotionClick = (value, id) => {
 
-  const emotionClick = () => {
-    let data = document.querySelector("#element svg");
-    let Anchors = data.getElementsByTagName("a");
-    let value = "";
-    for (var i = 0; i < Anchors.length; i++) {
-      var str = Anchors[i].getAttribute("class");
-      if (str.includes("active")) {
-        value = Anchors[i].getAttribute("title");
-      //  Anchors[i].classList.add("customactive");
-      }
-      // else{
-      //   Anchors[i].classList.remove("customactive");
-      // }
-    }
-    setEmotions(value)
-  }
+
+
+    // let data = document.querySelector("#element svg");
+    // let Anchors = data.getElementsByTagName("a");
+    // let value = "";
+    // for (var i = 0; i < Anchors.length; i++) {
+    //   var str = Anchors[i].getAttribute("class");
+    //   if (str.includes("active")) {
+    //     value = Anchors[i].getAttribute("title");
+    //   }
+    // }
+    setEmotions(value);
+  };
+
+  console.log("emotions -----> ", emotions);
+
+  // const emotionClick = () => {
+  //   let data = document.querySelector("#element svg");
+  //   let el = data.getElementsByTagName("a");
+  //   // console.log("el ---> ", el);
+  //   let value = "";
+  //   for (let i = 0; i < el.length; i++) {
+  //     var c = 0;
+
+  //     var str = el[i].getAttribute("class");
+  //     if (str.includes("active")) {
+  //       value = el[i].getAttribute("title");
+  //       while (c < el.length) {
+  //         // alert("hello")
+  //         // el[c++].className = "slide";
+  //         el[c++].classList.add("customactive");
+  //         // value = el[c++].getAttribute("title");
+  //       }
+  //       // el[i].className = "slide active";
+  //       el[i].classList.remove("customactive");
+  //     }
+  //   }
+  //   console.log("value", value)
+  // };
 
   const formValid = validator.current.allValid();
 
@@ -125,10 +150,14 @@ const Step1 = () => {
             setIsLoading(false);
             navigate(`/step2?emotion=${emotions}`);
             Storage.set("emotion", data);
-          } else if(res.statusCode === 401 || res.statusCode === 403 || res.statusCode === 409) {
+          } else if (
+            res.statusCode === 401 ||
+            res.statusCode === 403 ||
+            res.statusCode === 409
+          ) {
             toast.error(res.message, { position: "top-center" });
             setIsLoading(false);
-          }else{
+          } else {
             toast.error("Something Went Wrong", { position: "top-center" });
             setIsLoading(false);
           }
@@ -140,6 +169,10 @@ const Step1 = () => {
       validator.current.showMessages();
     }
   }
+
+  const textPath = `<textPath xlink:href="#p-0-0" startoffset="50%">
+  Acceptance
+</textPath>`;
 
   return (
     <div>
@@ -237,6 +270,42 @@ const Step1 = () => {
                 </div>
               </div>
             </div>
+
+            <div className="row justify-content-center align-items-center">
+              <div className="col-md-6">
+                <div
+                  class="plutchik-instance"
+                  style={{ width: "75%", height: "50%", margin: "auto" }}
+                >
+                  <svg
+                    class="plutchik"
+                    version="1.1"
+                    viewBox="0 0 500 500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                  >
+                    {EmotionArray.map((item, key) => {
+                      return (
+                        <a
+                        key={key}
+                          href="javascript:;"
+                          class={item.createclass}
+                          title={item.title}
+                        onClick={()=>emotionClick(item.title, key)}
+                        >
+                          <path d={item.svgpath}></path>
+                          <text
+                            dangerouslySetInnerHTML={{ __html: item.textpath }}
+                          >
+                            {/* <textPath startoffset="50%">Acceptance</textPath> */}
+                          </text>
+                        </a>
+                      );
+                    })}
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -264,72 +333,71 @@ export default Step1;
 //   setEmotions(value);
 // };
 
-
 //const emotionClick = () => {
-    // alert("hello");
-    // let data = document.querySelector("#element svg");
-    // let Anchors = data.getElementsByTagName("a");
-    // let value = "";
-    // let blank_array = [];
-    // let activevalue = "";
-    // let str = [];
-    // for (var i = 0; i < Anchors.length; i++) {
-    //   str.push(Anchors[i].getAttribute("class"));
-    //   blank_array.push(Anchors[i].getAttribute("title"));
+// alert("hello");
+// let data = document.querySelector("#element svg");
+// let Anchors = data.getElementsByTagName("a");
+// let value = "";
+// let blank_array = [];
+// let activevalue = "";
+// let str = [];
+// for (var i = 0; i < Anchors.length; i++) {
+//   str.push(Anchors[i].getAttribute("class"));
+//   blank_array.push(Anchors[i].getAttribute("title"));
 
-      // if (str.includes("active")) {
-      //   activevalue = Anchors[i].getAttribute("title");
-      // }
-      // console.log("activevalue", activevalue);
+// if (str.includes("active")) {
+//   activevalue = Anchors[i].getAttribute("title");
+// }
+// console.log("activevalue", activevalue);
 
-      // strarray.filter((item, ind)=>{
-      //   console.log("strarray[ind]", strarray[ind]);
-      //   extract = strarray[ind].slice(7);
-      //   if(item.includes(extract)){
-      //     activevalue = Anchors[i].getAttribute("title")
-      //   }
-      // })
+// strarray.filter((item, ind)=>{
+//   console.log("strarray[ind]", strarray[ind]);
+//   extract = strarray[ind].slice(7);
+//   if(item.includes(extract)){
+//     activevalue = Anchors[i].getAttribute("title")
+//   }
+// })
 
-      // for (let item in strarray){
-      //   var extract = strarray[item].slice(7);
-      //   if(item.includes(extract)){
-      //     activevalue = Anchors[i].getAttribute("title")
-      //   }
-      // }
-   // }
+// for (let item in strarray){
+//   var extract = strarray[item].slice(7);
+//   if(item.includes(extract)){
+//     activevalue = Anchors[i].getAttribute("title")
+//   }
+// }
+// }
 
-    // console.log("str ---> ", str);
-    // console.log("Anchors.length", Anchors.length);
+// console.log("str ---> ", str);
+// console.log("Anchors.length", Anchors.length);
 
-    // str &&
-    //   str.length > 0 &&
-    //   str.map((val, ind) => {
-    //     if (val.includes("active")) {
-    //       activevalue = Anchors[ind].getAttribute("title");
-    //       if (blank_array[ind] === activevalue) {
-    //         Anchors[ind].classList.add("customactive");
-    //       } else {
-    //         Anchors[ind].classList.remove("customactive");
-    //       }
-    //     }
-    //   });
+// str &&
+//   str.length > 0 &&
+//   str.map((val, ind) => {
+//     if (val.includes("active")) {
+//       activevalue = Anchors[ind].getAttribute("title");
+//       if (blank_array[ind] === activevalue) {
+//         Anchors[ind].classList.add("customactive");
+//       } else {
+//         Anchors[ind].classList.remove("customactive");
+//       }
+//     }
+//   });
 
-    //   console.log("activevalue", activevalue)
+//   console.log("activevalue", activevalue)
 
-    // blank_array &&
-    //   blank_array.length > 0 &&
-    //   blank_array.filter((item, i) => {
-    //     if (activevalue.includes(item)) {
-    //       value = activevalue;
-    //       Anchors[i].classList.add("customactive");
-    //     } else {
-    //       Anchors[i].classList.remove("customactive");
-    //     }
-    //   });
-    // console.log("str ---> ", str)
-    // console.log("value ---> ", value)
-    // console.log("activevalue", activevalue)
-    // console.log("blank_array", blank_array)
-    // Anchors.classList.add("customactive" + value);
-   // setEmotions(value);
-  //};
+// blank_array &&
+//   blank_array.length > 0 &&
+//   blank_array.filter((item, i) => {
+//     if (activevalue.includes(item)) {
+//       value = activevalue;
+//       Anchors[i].classList.add("customactive");
+//     } else {
+//       Anchors[i].classList.remove("customactive");
+//     }
+//   });
+// console.log("str ---> ", str)
+// console.log("value ---> ", value)
+// console.log("activevalue", activevalue)
+// console.log("blank_array", blank_array)
+// Anchors.classList.add("customactive" + value);
+// setEmotions(value);
+//};

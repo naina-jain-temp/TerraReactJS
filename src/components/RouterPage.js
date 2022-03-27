@@ -8,12 +8,12 @@ import Index from "./Index";
 import Login from "./Login";
 import Signup from "./Signup";
 import Signup2 from "./Signup2";
-import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Logout from "./logout";
 import Header from "./Includes/Header";
 import ForgetPassword from "./Auth/ForgetPassword";
 import ResetPassword from "./Auth/ResetPassword";
+import Step1 from "./WheelofEmotion/Step1";
 
 const RouterPage = () => {
   return (

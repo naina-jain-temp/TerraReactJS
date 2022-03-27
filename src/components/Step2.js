@@ -64,6 +64,7 @@ const Step2 = () => {
      setBackActive(false)
     }else{
       setBackActive(true)
+      setSubmitRating("")
     }
   };
 
@@ -77,14 +78,14 @@ const Step2 = () => {
       <section className="mt-4">
         <div className="container-md">
           <div className="row justify-content-center ">
-            <div className="col-md-9">
+            <div className="col-md-12 col-lg-9">
               <div className="swiper mySwiper">
                 <div className="swiper-wrapper">
                   <div className="swiper-slide">
                     <Swiper
                       navigation={true}
                       modules={[Navigation]}
-                      className="mySwiper"
+                      className={backActive ? "mySwiper responsive-swipper" : "mySwiper" } 
                       onSlideChange={(e) => slideHandler(e)}
                     >
                       <SwiperSlide>

@@ -233,10 +233,10 @@ const Chart = () => {
   return (
   
         <main className="about contact">
-          <section>
+          <section className="chart_section">
             <div className="container-md chart-container">
               <div className="row mt-5 justify-content-center ">
-                <div className="col-5">
+                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-6">
                   <div className="card">
                     <div className="card-header">Heading</div>
                     <div className="card-body pt-5">
@@ -247,9 +247,9 @@ const Chart = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-7">
+                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-6">
                   <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-lg-6 col-xl-6 ">
                       <div className="card">
                         <div className="card-header">Heading</div>
                         <div className="card-body">
@@ -263,7 +263,7 @@ const Chart = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-6 mt-2">
+                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                       <div className="card">
                         <div className="card-header">Heading</div>
                         <div className="card-body">

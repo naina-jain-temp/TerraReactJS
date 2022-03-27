@@ -1,0 +1,172 @@
+
+@media screen and (max-width: 480px) {
+    .customInput {
+        margin: 15px 0;
+    }
+    .customInput label{
+        font-size: 14px;
+    }
+    .custom-btn{
+        margin: auto;
+    }
+    .logo{
+        width: 100%;
+        max-width: 50%;
+    }
+    .check-box > span img {
+        max-width: 70px;
+    }
+    .step{
+        min-height: 0px !important;
+    }
+    .swiperback{
+        top: 88% !important;
+    }
+    .swiper-button-next, .swiper-button-prev{
+        top: 85% !important;
+    }
+    .responsive-swipper{
+        max-height: 385px;
+    }
+    .chart_section .card {
+        margin: 10px 0;
+    }
+  }
+
+  @media screen and (max-width: 567px) {
+    .customInput {
+        margin: 15px 0;
+    }
+    .customInput label{
+        font-size: 14px;
+    }
+    .custom-btn{
+        margin: auto;
+    }
+    .logo{
+        width: 100%;
+        max-width: 30%;
+    }
+    .login_Sec{
+        margin: 10px;
+    }
+    .signup_Sec{
+        margin: 10px;
+    }
+    .check-box > span img {
+        max-width: 70px;
+    }
+    .step{
+        min-height: 0px !important;
+    }
+    .swiperback{
+        top: 88% !important;
+    }
+    .swiper-button-next, .swiper-button-prev{
+        top: 85% !important;
+    }
+    .responsive-swipper{
+        max-height: 385px;
+    }
+    .chart_section .card {
+        margin: 10px 0;
+    }
+  }
+
+  @media screen and (min-width: 568px) and (max-width: 991px) {
+    div#navbarScroll {
+        background: #902693;
+        z-index: 9999;
+        border: 1px solid #522e92;
+        border-radius: 5px;
+    }
+    header .navbar-nav .nav-item {
+        margin: 10px 0;
+        margin-left: 45px;
+    }
+  }
+
+  @media screen and (min-width: 568px) and (max-width: 767px) {
+    .customInput {
+        margin: 15px 0;
+    }
+    .customInput label{
+        font-size: 14px;
+    }
+    .plutchik-instance{
+        width: 100%;
+        height: 100%;
+    }
+    .customizable{
+        width: 100%;
+        max-width: 60%;
+        margin: auto;
+    }
+    .login_Sec{
+        margin: 10px;
+    }
+    .logo{
+        width: 100%;
+        max-width: 70%;
+    }
+    .signup_Sec{
+        margin: 10px;
+    }
+    .check-box > span img{
+        max-width: 70%;
+    }
+    .step{
+        min-height: 100%;
+    }
+    .btn-scale{
+        min-width: 35px;
+    }
+    .chart_section .card {
+        margin: 10px 0;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .customInput label{
+        font-size: 14px;
+    }
+    .plutchik-instance{
+        width: 100%;
+        height: 100%;
+    }
+    .login_Sec{
+        margin: 10px;
+    }
+    .logo{
+        width: 100%;
+        max-width: 70%;
+    }
+    .signup_Sec{
+        margin: 10px;
+    }
+    .check-box.dislike, .check-box.like{
+        margin: 0 10px !important;
+    }
+
+    .check-box > span img{
+        max-width: 70%;
+    }
+    .chart_section .card {
+        margin: 10px 0;
+    }
+
+  }
+
+  @media screen and (max-width: 1200px) {
+    .logo{
+        width: 100%;
+        max-width: 70%;
+    }
+    .check-box > span img{
+        max-width: 70%;
+    }
+    .chart_section .card {
+        margin: 10px 0;
+    }
+
+  }
